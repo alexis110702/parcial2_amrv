@@ -77,6 +77,7 @@ defineExpose({ obtenerLista })
         <template #body="{ data }">{{ data.fechaInicio?.toString().slice(0, 10) }}</template>
       </Column>
       <Column field="estado" header="Estado" sortable />
+      <Column field="modalidadClases" header="Modalidad" sortable />
       <Column header="Acciones" frozen align-frozen="right" style="min-width: 120px">
         <template #body="{ data }">
           <Button icon="pi pi-pencil" aria-label="Editar" text @click="emitirEdicion(data)" />

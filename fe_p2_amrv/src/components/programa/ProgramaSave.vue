@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { NivelAcademico } from '@/models/nivelAcademico'
-import type { Programa } from '@/models/programa'
-import { ESTADOS_PROGRAMA } from '@/models/programa'
-import http from '@/plugins/axios'
-import { InputNumber, Select, Textarea } from 'primevue'
-import Button from 'primevue/button'
-import Dialog from 'primevue/dialog'
-import InputText from 'primevue/inputtext'
-import { computed, ref, watch } from 'vue'
+import type { NivelAcademico } from "@/models/nivelAcademico";
+import type { Programa } from "@/models/programa";
+import { ESTADOS_PROGRAMA, MODALIDADES_CLASES } from "@/models/programa";
+import http from "@/plugins/axios";
+import { InputNumber, Select, Textarea } from "primevue";
+import Button from "primevue/button";
+import Dialog from "primevue/dialog";
+import InputText from "primevue/inputtext";
+import { computed, ref, watch } from "vue";
 
-const ENDPOINT = 'programas'
+const ENDPOINT = "programas";
 const props = defineProps({
   mostrar: Boolean,
   programa: {
@@ -17,28 +17,30 @@ const props = defineProps({
     default: () => ({}) as Programa,
   },
   modoEdicion: Boolean,
-})
-const emit = defineEmits(['guardar', 'close'])
+});
+const emit = defineEmits(["guardar", "close"]);
 
 const dialogVisible = computed({
   get: () => props.mostrar,
   set: (value) => {
-    if (!value) emit('close')
+    if (!value) emit("close");
   },
-})
+});
 
-const nivelesAcademicos = ref<NivelAcademico[]>([])
-const programa = ref<Programa>({ ...props.programa })
+const nivelesAcademicos = ref<NivelAcademico[]>([]);
+const programa = ref<Programa>({ ...props.programa });
 
 watch(
   () => props.programa,
   (newVal) => {
-    programa.value = { ...newVal }
+    programa.value = { ...newVal };
   },
-)
+);
 
 async function obtenerNivelesAcademicos() {
-  nivelesAcademicos.value = await http.get('niveles-academicos').then((res) => res.data)
+  nivelesAcademicos.value = await http
+    .get("niveles-academicos")
+    .then((res) => res.data);
 }
 
 async function handleSave() {
@@ -52,17 +54,18 @@ async function handleSave() {
       costo: programa.value.costo,
       fechaInicio: programa.value.fechaInicio,
       estado: programa.value.estado,
-    }
+      modalidadClases: programa.value.modalidadClases,
+    };
     if (props.modoEdicion) {
-      await http.patch(`${ENDPOINT}/${programa.value.id}`, body)
+      await http.patch(`${ENDPOINT}/${programa.value.id}`, body);
     } else {
-      await http.post(ENDPOINT, body)
+      await http.post(ENDPOINT, body);
     }
-    emit('guardar')
-    programa.value = {} as Programa
-    dialogVisible.value = false
+    emit("guardar");
+    programa.value = {} as Programa;
+    dialogVisible.value = false;
   } catch (error: any) {
-    alert(error?.response?.data?.message)
+    alert(error?.response?.data?.message);
   }
 }
 
@@ -70,15 +73,18 @@ watch(
   () => props.mostrar,
   (nuevoValor) => {
     if (nuevoValor) {
-      obtenerNivelesAcademicos()
+      obtenerNivelesAcademicos();
       if (props.programa?.id) {
-        programa.value = { ...props.programa }
+        programa.value = { ...props.programa };
       } else {
-        programa.value = { estado: 'En Planificación' } as Programa
+        programa.value = {
+          estado: "En Planificación",
+          modalidadClases: "Presencial",
+        } as Programa;
       }
     }
   },
-)
+);
 </script>
 
 <template>
@@ -89,7 +95,9 @@ watch(
       style="width: 30rem"
     >
       <div class="flex items-center gap-4 mb-4">
-        <label for="nivelAcademico" class="font-semibold w-4">Nivel Académico</label>
+        <label for="nivelAcademico" class="font-semibold w-4"
+          >Nivel Académico</label
+        >
         <Select
           id="nivelAcademico"
           v-model="programa.idNivelAcademico"
@@ -132,7 +140,9 @@ watch(
         />
       </div>
       <div class="flex items-center gap-4 mb-4">
-        <label for="duracionMeses" class="font-semibold w-4">Duración (meses)</label>
+        <label for="duracionMeses" class="font-semibold w-4"
+          >Duración (meses)</label
+        >
         <InputNumber
           id="duracionMeses"
           v-model="programa.duracionMeses"
@@ -171,6 +181,15 @@ watch(
           class="flex-auto"
         />
       </div>
+      <div class="flex items-center gap-4 mb-4">
+        <label for="modalidadClases" class="font-semibold w-4">Modalidad</label>
+        <Select
+          id="modalidadClases"
+          v-model="programa.modalidadClases"
+          :options="MODALIDADES_CLASES"
+          class="flex-auto"
+        />
+      </div>
       <div class="flex justify-end gap-2">
         <Button
           type="button"
@@ -179,7 +198,12 @@ watch(
           severity="secondary"
           @click="dialogVisible = false"
         />
-        <Button type="button" label="Guardar" icon="pi pi-save" @click="handleSave" />
+        <Button
+          type="button"
+          label="Guardar"
+          icon="pi pi-save"
+          @click="handleSave"
+        />
       </div>
     </Dialog>
   </div>
