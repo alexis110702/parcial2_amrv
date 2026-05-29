@@ -10,7 +10,7 @@ import {
   MaxLength,
   Min,
 } from "class-validator";
-import { EstadoPrograma, ModalidadClases } from '../entities/programa.entity';export class CreateProgramaDto {
+import { EstadoPrograma, AreaConocimiento } from '../entities/programa.entity';export class CreateProgramaDto {
   @ApiProperty({
     description: "ID del nivel académico",
     example: 1,
@@ -86,13 +86,13 @@ import { EstadoPrograma, ModalidadClases } from '../entities/programa.entity';ex
   })
   estado: EstadoPrograma;
   @ApiProperty({
-    description: "Modalidad de clases",
-    enum: ModalidadClases,
-    example: ModalidadClases.PRESENCIAL,
+    description: "Área de conocimiento",
+    enum: AreaConocimiento,
+    example: AreaConocimiento.PRESENCIAL,
   })
-  @IsNotEmpty({ message: "La modalidad de clases es obligatoria" })
-  @IsEnum(ModalidadClases, {
-    message: `Modalidad debe ser: ${Object.values(ModalidadClases).join(", ")}`,
+  @IsNotEmpty({ message: "El área de conocimiento es obligatoria" })
+  @IsEnum(AreaConocimiento, {
+    message: `Área de conocimiento debe ser una de: ${Object.values(AreaConocimiento).join(", ")}`,
   })
-  modalidadClases: ModalidadClases;
+  areaConocimiento: AreaConocimiento;
 }

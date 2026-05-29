@@ -54,7 +54,7 @@ async function handleSave() {
       costo: programa.value.costo,
       fechaInicio: programa.value.fechaInicio,
       estado: programa.value.estado,
-      modalidadClases: programa.value.modalidadClases,
+      areaConocimiento: programa.value.areaConocimiento,
     };
     if (props.modoEdicion) {
       await http.patch(`${ENDPOINT}/${programa.value.id}`, body);
@@ -79,7 +79,7 @@ watch(
       } else {
         programa.value = {
           estado: "En Planificación",
-          modalidadClases: "Presencial",
+          areaConocimiento: "Presencial",
         } as Programa;
       }
     }
@@ -182,10 +182,10 @@ watch(
         />
       </div>
       <div class="flex items-center gap-4 mb-4">
-        <label for="modalidadClases" class="font-semibold w-4">Modalidad</label>
+        <label for="areaConocimiento" class="font-semibold w-4">Área de Conocimiento</label>
         <Select
-          id="modalidadClases"
-          v-model="programa.modalidadClases"
+          id="areaConocimiento"
+          v-model="programa.areaConocimiento"
           :options="MODALIDADES_CLASES"
           class="flex-auto"
         />

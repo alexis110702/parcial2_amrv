@@ -19,5 +19,5 @@ export interface Programa {
   fechaInicio: string
   estado: EstadoPrograma
   nivelAcademico: NivelAcademico
-  modalidadClases: ModalidadClases
+  areaConocimiento: ModalidadClases
 }

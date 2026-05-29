@@ -16,11 +16,12 @@ export enum EstadoPrograma {
   FINALIZADO = "Finalizado",
 }
 
-export enum ModalidadClases {
-  PRESENCIAL = "Presencial",
-  VIRTUAL = "Virtual",
-  MIXTO = "Mixto",
+export enum AreaConocimiento {
+  PRESENCIAL = 'PRESENCIAL',
+  VIRTUAL = 'VIRTUAL',
+  MIXTO = 'Mixto'
 }
+
 
 @Entity("programas")
 export class Programa {
@@ -57,13 +58,13 @@ export class Programa {
   estado: EstadoPrograma;
 
   @Column({
-    name: "modalidad_clases",
+    name: "area_conocimiento",
     type: "varchar",
     length: 20,
     nullable: false,
-    enum: ModalidadClases,
+    enum: AreaConocimiento,
   })
-  modalidadClases: ModalidadClases;
+  areaConocimiento: AreaConocimiento;
 
   @CreateDateColumn({ name: "fecha_creacion" })
   fechaCreacion: Date;
